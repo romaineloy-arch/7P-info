@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opération Pare-feu · Escape game cybersécurité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1420; --panel:#151f30; --panel2:#1c2940; --line:#2a3a56;
+  --txt:#e8eef7; --mute:#9db0cc; --cyan:#3ee0c4; --gold:#f5c451; --bronze:#d9925a; --silver:#c9d3e0;
+  --red:#ff6b6b; --green:#4ade80; --choco:#7a4a2e;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-size:17px;line-height:1.5}
+body{background-image:radial-gradient(circle at 15% -10%,#1b3350 0,transparent 45%),radial-gradient(circle at 110% 10%,#1d2b47 0,transparent 40%)}
+h1,h2,h3{font-family:"Space Grotesk",sans-serif;line-height:1.2;margin:0 0 .5em}
+.mono{font-family:"JetBrains Mono",monospace;font-size:.92em}
+.wrap{max-width:1080px;margin:0 auto;padding:18px 18px 60px}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--cyan);color:#06201b;border:0;border-radius:10px;padding:10px 18px;font-weight:700}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{background:#3a4a63;color:#8a9bb5;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+.btn.sm{padding:6px 12px;font-size:.9em}
+.btn.gold{background:var(--gold);color:#2b1d00}
+input[type=text],textarea,select{font:inherit;background:#0b111b;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+input[type=text]:focus,textarea:focus,select:focus{outline:2px solid var(--cyan);border-color:transparent}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0}
+.topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);background:rgba(13,20,32,.85);position:sticky;top:0;z-index:5;backdrop-filter:blur(6px)}
+.logo{font-family:"Space Grotesk",system-ui,sans-serif;font-weight:700;font-size:1.15em}
+.logo span{color:var(--cyan)}
+.grow{flex:1}
+.pill{background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:.9em;white-space:nowrap}
+.xp{color:var(--gold);font-weight:700}
+.hero{text-align:center;padding:30px 10px 10px}
+.hero h1{font-size:2.6em}
+.hero h1 span{color:var(--cyan)}
+.story{max-width:720px;margin:0 auto;text-align:left}
+.tag{display:inline-block;font-size:.78em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:99px}
+.t1{background:rgba(217,146,90,.18);color:var(--bronze)}
+.t2{background:rgba(201,211,224,.15);color:var(--silver)}
+.t3{background:rgba(245,196,81,.15);color:var(--gold)}
+.paliers{display:grid;gap:16px}
+.palier{border-radius:16px;border:1px solid var(--line);background:var(--panel);padding:18px}
+.palier.locked{opacity:.55}
+.palier h2{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.missions{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:10px}
+.mcard{text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--txt)}
+.mcard:hover:not(:disabled){border-color:var(--cyan)}
+.mcard:disabled{cursor:not-allowed}
+.mcard b{display:block;font-family:"Space Grotesk",system-ui,sans-serif;font-size:1.05em;margin-bottom:4px}
+.mcard small{color:var(--mute)}
+.mcard .st{float:right;font-size:.85em}
+.gate{margin-top:14px;padding:14px;border:1px dashed var(--gold);border-radius:12px;background:rgba(245,196,81,.06);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.know{background:#101a2a;border-left:4px solid var(--cyan);border-radius:8px;padding:12px 16px;margin:12px 0}
+.know ul{margin:6px 0 0;padding-left:20px}
+.hint{background:rgba(245,196,81,.08);border-left:4px solid var(--gold);border-radius:8px;padding:10px 14px;margin:8px 0}
+.mailapp{display:grid;grid-template-columns:320px 1fr;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#f6f7fb;color:#1c2333;min-height:440px}
+.inbox{background:#eceff6;border-right:1px solid #d6dbe6;overflow:auto;max-height:560px}
+.inbox .ih{padding:10px 14px;font-weight:700;font-family:"Space Grotesk",system-ui,sans-serif;background:#dfe4ef}
+.mail{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #d6dbe6;background:transparent;padding:10px 12px 10px 36px;position:relative;color:#1c2333}
+.mail:hover{background:#e3e8f2}
+.mail.active{background:#fff;box-shadow:inset 4px 0 0 #2b6be0}
+.mail .mk{position:absolute;left:10px;top:12px}
+.mail .from{display:block;font-weight:700;font-size:.95em}
+.mail .subj{display:block;font-size:.88em;color:#4a5570;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reader{padding:20px;display:flex;flex-direction:column}
+.reader .hdr{border-bottom:1px solid #d6dbe6;padding-bottom:12px;margin-bottom:12px;font-size:.95em}
+.reader .addr{font-family:"JetBrains Mono",monospace;font-size:.9em;background:#eef1f7;padding:1px 6px;border-radius:5px}
+.reader .body{flex:1}
+.fakelink{display:inline-block;background:#2b6be0;color:#fff;border-radius:6px;padding:6px 14px;margin:6px 0;cursor:pointer;font-weight:700}
+.fakelink:focus{outline:3px solid #9dc0ff}
+.att{display:inline-block;background:#eef1f7;border:1px solid #d6dbe6;border-radius:8px;padding:6px 12px;margin-top:8px;font-family:"JetBrains Mono",monospace;font-size:.9em}
+.status{background:#1c2333;color:#cfe3ff;font-family:"JetBrains Mono",monospace;font-size:.85em;padding:8px 12px;border-radius:8px;margin-top:12px;min-height:36px;word-break:break-all}
+.classify{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.cbtn{border:2px solid #c9d1e0;background:#fff;color:#1c2333;border-radius:10px;padding:9px 16px;font-weight:700}
+.cbtn.on.f{border-color:#1f9d55;background:#e3f8eb}
+.cbtn.on.h{border-color:#d64545;background:#fde8e8}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.verify{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.debrief{background:#0f2a24;border:1px solid #1e5a4c;border-radius:14px;padding:16px 20px;margin-top:16px}
+.debrief li{margin:6px 0}
+.rule{background:rgba(62,224,196,.1);border-radius:8px;padding:10px 12px;margin:10px 0 0}
+.pw{display:grid;grid-template-columns:240px 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.pw .mono{background:#0b111b;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:1em}
+.checks{list-style:none;padding:0;margin:10px 0}
+.checks li{padding:3px 0}
+.checks li.ok{color:var(--green)}
+.checks li.ko{color:var(--mute)}
+.crack{font-size:1.05em;margin-top:6px}
+.q{background:var(--panel2);border-radius:12px;padding:14px 16px;margin:10px 0}
+.qt{font-weight:700;margin:0 0 8px}
+.opt{display:block;padding:7px 10px;border-radius:8px;cursor:pointer;margin:2px 0}
+.opt:hover{background:rgba(255,255,255,.04)}
+.opt.good{background:rgba(74,222,128,.14);color:var(--green)}
+.exp{margin-top:8px;color:#bdf5d3}
+.urlrow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:8px;background:#0b111b;border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-family:"JetBrains Mono",monospace;font-size:.9em;word-break:break-all}
+.vf{display:flex;gap:6px}
+.vf button{border:2px solid var(--line);background:transparent;color:var(--txt);border-radius:8px;padding:6px 12px;font-weight:700}
+.vf button.on.v{border-color:var(--green);background:rgba(74,222,128,.15)}
+.vf button.on.x{border-color:var(--red);background:rgba(255,107,107,.15)}
+.post{max-width:560px;background:#fff;color:#1c2333;border-radius:14px;overflow:hidden;margin:10px auto}
+.post .ph{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #eee}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f5a524,#e0457b);display:grid;place-items:center;color:#fff;font-weight:700}
+.post .pic{height:170px;background:linear-gradient(135deg,#6b3e26,#c58b4f);display:grid;place-items:center;font-size:3.2em}
+.post .ptxt{padding:14px 16px;line-height:1.9}
+.seg{cursor:pointer;border-bottom:2px dotted #8aa0c8;padding:1px 2px;border-radius:4px}
+.seg:hover{background:#eef3ff}
+.seg.found{background:#ffe1e1;border-bottom:2px solid #d64545;color:#a11}
+.seg.safe{background:#eef0f4;color:#7a8296;border-bottom-color:transparent;text-decoration:line-through}
+.counter{font-family:"Space Grotesk",system-ui,sans-serif;font-size:1.2em}
+.cipher{font-family:"JetBrains Mono",monospace;font-size:1.5em;letter-spacing:.08em;background:#0b111b;border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--gold);word-spacing:.35em}
+.wheel{overflow-x:auto;margin:12px 0}
+.wheel table{border-collapse:collapse;font-family:"JetBrains Mono",monospace;margin:0 auto}
+.wheel td{border:1px solid var(--line);width:30px;height:30px;text-align:center}
+.wheel tr:first-child td{color:var(--gold)}
+.wheel tr:last-child td{color:var(--cyan)}
+.wheel th{padding-right:8px;text-align:right;font-weight:400;color:var(--mute);font-size:.8em;white-space:nowrap}
+.shift{display:flex;align-items:center;gap:10px;justify-content:center}
+.shift b{font-size:1.4em;min-width:2ch;text-align:center}
+.cert{text-align:center;border:3px solid var(--gold);border-radius:20px;padding:30px;background:linear-gradient(160deg,#1a2438,#121a29)}
+.cert .rank{font-size:2em;font-family:"Space Grotesk",system-ui,sans-serif;color:var(--gold);margin:10px 0}
+.cert .name{font-size:1.8em;font-family:"Space Grotesk",system-ui,sans-serif}
+.progress{height:10px;background:#0b111b;border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.progress div{height:100%;background:linear-gradient(90deg,var(--cyan),var(--gold))}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:#22324d;border:1px solid var(--line);color:var(--txt);padding:12px 20px;border-radius:12px;transition:transform .25s;z-index:20;max-width:90vw;text-align:center;font-weight:700}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.good{background:#14532d;border-color:#22c55e}
+#toast.bad{background:#5b1d1d;border-color:#ef4444}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:30;padding:20px}
+.modal .card{max-width:640px;max-height:85vh;overflow:auto;margin:0}
+dt{font-weight:700;color:var(--cyan);margin-top:10px}
+dd{margin:2px 0 0}
+.foot{margin-top:30px;color:var(--mute);font-size:.85em;text-align:center}
+.foot button{background:none;border:0;color:var(--mute);text-decoration:underline}
+.crit label{display:block;padding:4px 0}
+@media (max-width:760px){
+  .mailapp{grid-template-columns:1fr}
+  .inbox{max-height:260px}
+  .pw{grid-template-columns:1fr}
+  .hero h1{font-size:2em}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<div id="modal"></div>
+<script>
+"use strict";
+const DATA = {"cipher":"OH FRGH ZLIL HVW VXU XQ SRVWLW D O'DFFXHLO","m1":["8mpdirpf8l","25psgyirqtk","1o6njwtd3g4","1jpi0kgfwir","nvym591m34","nz7akxs6dn","mn5fn0qm7o","1yk7k426po2","1xyj3gxp5tc","17psvuj4fao"],"m1d":"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","m2a":["1yaksn9k8vv","1tuusxrdlyp","1ggnolcvylg","17r7ovr9gax","2aanvfpvpqj"],"m2ad":"cC9tG8zc7sK9Zh4ndayfwd1lQCQG+PG7zHVP7aZkzefNKUZreuaMZx0kMy5rSbmK5tQaFTIc85Lq/IrEawjww9hAxPhkUr78l/6YLgp0aLU1O8UyWE1dvpnpjjYi7KhUkOuOCA5xRba51cTLKR5yXvL2vtk/ThgHn4OylStXMybw07WQfEZfGh45eQ2QChg5X7uCv+szUGVMvpXVjycJKlShrPOCMhdqeGuqPjeYOwYLX7uf9dR0bF9dp5v+YtxMY03niuf3KxJaeNxXXuvWOFVmW4uY/dA3Qjk+pIOxoXcAUx/5hL7hIwIOMXu1nOepHhZ+UbXUmpkIGWZbpaWslW0GOA8dYBKFyDMTAEmpnfPRfTl4QLaA9oQWDC1eqZnw/mJeIU2uhNvu2nRedV6Rj7bSIldwb6aQ+MhiR0RXpY/qySsrJ0awwp/96D4cbV713FouxPssHbe6tKZ1BWAcyIG5wTwFe2m9q5Lwz2xpfwfyFhAtTwN+UO2B7/chDixOsc3azCMRakZGwsO92jkUYCumm+TFNAkMR6qbrsQoJnhDsMfjzQ1FcXNOv4PCzXZBOlm39p2POBsyGZPWwNonAmko8dWynG0JfTreX2u5whawvl65nbmmdA9lQQxJ040tByRIrrb10yQzHnMg5dv62zcURVXyNDOTMCBmWLiN+IMIF3YBrYT5vMmc0W1dsLDkliAYdFGPgOmEcEFrfvDisYowAgY=","m2c":["201txn2jded","uhwhug19x5","a7pfgj6xwj"],"m2cx":["AD9bdpD78cr3FnwfP72B0P9KIkRdvL6dtAl4YFSfopPlWBN8P5n8zywVJWBFPYio5dEMMA8xxRAECwFrXCiukJv4XjMWU+T8h4K+QRZlJZHglbU3C115gqiXySGUjimO+fCOCCEFcJC+ncDgXDxJWbOnyLIVInpWg6yN+1oGdjTL","AZmCO4Wz8cKjBmEfOrCAxe5BdhNftaidqQJyL02ZsNrgUkZ/fpzgxsKdPywWJI/gtNAINxBkxdPo90AsTXsJStdInioXT778+pjxQ1hlxlzpdm0nEEFyx+XRjgY0UzKd86jCGW4AY8OomtTlCTargvypWkbpZmFP07OQ/EkAYHiPug==","GTQIMYXj98LsHWFeIKqXhLJHOQtcvO3euBhnLkmYsDktUxXMtpyzwpjEdi5XPpPt9MkMLBNig53xsgR7W3iqk8vnXiQQVKOzvJ++XQnSrJbs1Ks/C+21x7/VjyQ/Tj2N5+GODCsDIt+ygdKxTTxLSr25y6NeIEZV07OQ/E1Fa2DK+9P2NAcdaySe5/fVFHQ9e9aTs68R4bPEpYvA6Uo+HwW8rMDxEXZ3YCKc65ikMgFONQ=="],"m3":["1pg57frbie5","ydc13dzn63","2aobe9ii2xj","wgr7hlb8x4","yin576m9hc","gg9o8xv1rw","234qq39m8u0","4umcf7lb5t","2dda63k1a6w","1mxwa5pzkta"],"m3d":"cDV/HN/Y69+HqueOENqNoNYnBCxXpZnn0RdWYlK+huTOPk1gTcLY5LeYYUpxSf+I7usqUmFbuofg1i5EPDmzh6+qfx5sCiV6YoLnP01qTa+YoN09FQ5CpY2olzhTb0qtmcjaNhApS7m+gfWUMyliAu6SrYJuRNWd5LD6xCwZahOpn/HLMjF5CEu920gGbBH8vHOG4dF0BnPLWHL/zlYbzZinlvvWMQpjenbrm/icO624QqaGtrJoGnAWwcbh1XGMkI7z3veaNAMQflL0ksPDPQ58WrHb5tJqS1AF6sesbfVBY1arnteZZovDO0+umL/LMmpwXbCHusImFWpDrrO/yiRAdUCknafV3RYONBHzk+ePSk9+UdAFCi9oJ38Nqp3vxVodbVjkguXtiGcYLmSq0/LFOhR8CrmT8K50CCMC77vvkDMOfW37xoHszzpdf16wj4ph+UVnFwRStpdlDF8BxM3symyHiLHm6KC12SwffkH8jP7CNzxzGLuNt5UvQi8U7K/9gpfPJ1oZCkC6c8ZPckDwg+7UJxI2QIfbSBZsBj7ja82+hxIeOAMEt4OjTsPqPDahzOzaIxRoVq6ervU3AXJPr5Px0TUPEQ9Hr4D50WATZQ/9mpCHbFl7RK+escshAVtarJCkyDA/AXhTtaqhgm4cehzf2PvferCHvP3Q7YAjEW1Tvbu6zsYqF3BSotH82VZMcBv0zabcNkvIi9aTrnP7Q9GF9IvntPInG25Z/4rkgJHZOGfnNCKGd1VhVfHksPY6XPe4U9bF6oUtB1EBvYDz0i1YbVqmi8DPZB9pE/GDroN4SF1S5riN8oouGXZK/KbmkoffNxnpOjCKLjM/TbmB7dUgVHdHR8KH/40vFnpU7s+91AdZHAWkgqRPwPkuEJjN4d0rBHl1Sa+f4u8qU21Fvof7iSQDdGK0mOmCLBFsDOyAtr5tRgp9G6QfDCY7D14DooTnlyoMOE+ljdfWIBQgTLSD/cQvMS4lBuKQ9pBbXH9b5iwbIHkkbhq7ju7HbDR8T/WB9MKZdBkkU4mB8MQoGm1b6YTzxwcJY06pirDPNRc+B5zJqLWXNwMjJuPR8+Z9TnUUtIroyzhXImSqgvSCfYKak2fGyMCVme08TauF5d07Cg4d6tbqlXoBeQ+4ntvaYhtrSva9nbvJOTJqHqSD54I/EWRCofL63DwCex6tlaPSOjt6T0yq20gWbFA+/lHNsukxV2VIvI7kwQVf/q5UcbLTMRJyNHGuj+HZMgt/VPOW8fwiVmhdrtrh3W8NY3S9h+3NKBhZbUiu0MXHNwd2QQFc4VXWwhJWCVfhyn4NdVDijt/CPmkLcl64n7/bMmpsXLHU4shpWTcFsOg=","m4r":["g0d7ud5dkn","1bljzxn139p","108dui5918u","s6ftbfwko","v6gb2jytfz"],"m4d":"cDIFaF9Oe2OsZ3RcbYPqhtIMKRV/heSS+15zWijVv4yQVT5Fcc3ggJLBDSMEaBoQNiBGOh0/6fmctVQyvu+I8Kz+EzYNcNHrqdf+DTNWMI+Mz/RLelVl2Lnbpx5/FHPOmd/kFnpfdcqN/omvT3dOKLnqybMfJQB8j/7B+VxvSDrsqtelXDQHbHzE5N3tYiUCEtbpirZfD0Bw0r9PQqjYXxCY6LquUXENWC6Rq4j2BG51eZXnkeJAIBM5n//H5gl6fm7WVU+xR8/lGz6B6YTvDx1ffobu1KBPKBIuke7G/lpMSdUf7MSnRRjI2C/I4ooM/GpTNcqzlbkOOxJw06bTuyk0Qj/bElzisAR9RnO89oPVVLb5z1elwP4FTVp9yLWSjB4jViyZ/InC6wxvHjmEr/HlEiYbZIXs3ahSOkFpmKGsoFZ6CjHF5b6KpQotGOgvZcumVnNUNpytjiP/hKW6n4nJ5Vd2VCeMLiDR3UJ1QTb8CB0kv+dZc5Dy35UBalNhPEU5dg9tF3JASRE2rFI4Ck+Zo9rwAztcN5txIHqVekNOxLqTvFFxDVguwu+CFdMvcGvG657oVnNSe8SsieYMdmh/yrmNrxU2bB4/iq2f5FkVXmfS9s6rHCwUNI29iv9MTFl32+3DvEMAbgR93riW4DAjGEyD7pCwQicRP97q26w/ZxQk2r2Q7rLbjojtlvaNgiswBzGVpZj5G3FQLtK/jZBVNEhj0fGJwapfKwh7nuD1qlwmvaqFydL7SDEeKZTx+boGeRpjx+2ln/wGYVZ5TXwz40g/UiDOqpKzXyJG2ATM/+IWYlQh38z/nuENdUUirL7D5lovRSyO8pdclCgGcLzk","m4b":["27o0hg3bkmi","1kcfzy93iig","1zvz6nsbq8l"],"m4bx":["DS9LJY+y8M7xBWBdLviGwflKOQ1ArKidqK+0fEmTsYSlWAIve4r4w4HYM2BCIZWo+NIdeQN1gYLl4RN9B3qIATsSVDUHAK658oZ9rOB4a5JAHas/HVx1we2NwCQ+RjGPt76OFyBWcdG+ltP+TDAMGrm+mK8fImFag7Oc4lcNImeF+4q5gsNQaGuQ6L7eEzmvvNSYv+AZY1s8pYPcqA==","D7ioyYTg94vnBin84fiByfNRPwxfvu1/YEw0ZkGboT8iWAlhfojwgp7dJGBlA6igu507ms5gz5zg4AU46/DrsO/EYWawm+q/vYT5RAt8YNXiweQmEVx90Kjf3jIyBymF+KTADSO1qsOy1cTiW3gJWaij3uBQ","GTRNcIL8QAKjJlp8abmQxfRGOAhfGmTY+wlsegCDqtz1XaSneIq1wYHdJTNfP47vtYdJPAt8xtL09xVsCTukjc/uXy8DAL+y8pz2XAxiJYT23eclmq6FzaOP2yY7SzjK8UcGC24HdlBdbM7/DzQKGr642a4SaHYV"],"m5a":"1dcglsouh3g","m5ax":"cCopUrSU6cCVdR16UL3A+Ms+BSAS89Hhy3hS8LVdeb2eLVfNtO6oxrD5Fy9XHIe0wutmJFJz/7PV73kwUQuVptfxGTUqb+qQ1Nr9ECpaZ53RXQt7SGMa/tXwg38IIHazj+Zn50B0S6S+kM/EfhVzHKKI7tMuEiJBr4+/3CsOdPh6z6uFIwYiQEW/kbDHDxN0FL2Usci594BPs43t2ygOb0Ss1lMDIgFlah0dQP3BPAcLSaWFvMM6R3ZHt5211y5RNVGikeKRIwAYdlOxnblv/V523Ghm9tE8Hm5TqcOj4rnzjFm7huPDOylKZV2/mrjNPRB5SbqM35w6Ander5T0jiIGNly5hfaZkT0XL0y8g/feNAJyVPeZ6YQAoqBboIz4kCoXLUelgfL72S0AK1mvn77NJhx7X7OR79IzFBdCqcvkQMDqY0q8JkX4xywcfRn01/Wf","m5b":["23dwiyyahke"],"m5bx":["GTQIIyI78M7iBij84PibyuxKI6eYqu1/YUxuzYmGpY/gFgtqbM/iy5zVIiVDPYio8dgaeQlixZvq8xR8XCi4w9/uECqRoFO5vJ/tSQljbIbnmuUTDA5py+2dwCMyByuD8e2OFitXcFJdbMD3SDEKUrnq0qAcY3pI0687LhsHwa3K58ihNUlRaGqR4vDUA3QdcNODv+MaJEQwpZSe"],"prof":{"2":"1l2ozyk8f78","3":"kc2q93zi5b","6":"yn4if7d16o"}};
+
+/* ---------- outils ---------- */
+function cyrb53(str, seed){let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);}
+const H = s => cyrb53('LUMEN|'+s, 7);
+function dec(b64,key){try{const bin=atob(b64);const kb=new TextEncoder().encode('K|'+key);const out=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++){out[i]=bin.charCodeAt(i)^kb[i%kb.length]^((i*31+7)&255);}return new TextDecoder().decode(out);}catch(e){return '';}}
+const $ = s => document.querySelector(s);
+function toast(msg,kind){const t=$('#toast');t.className='';t.textContent=msg;void t.offsetWidth;t.className='show '+(kind||'');clearTimeout(toast._t);toast._t=setTimeout(()=>t.className='',2600);}
+
+/* ---------- état ---------- */
+const KEY='operation-parefeu-v1';
+function fresh(){return {name:'',xp:0,done:{},parts:{},hints:{},gates:{},m1:{},m1sel:0,m2a:{},m3:{},m4f:[],m4w:[],m6c:{},view:'home'};}
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))||fresh();}catch(e){S=fresh();}
+S=Object.assign(fresh(),S);
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function addXP(n){S.xp=Math.max(0,S.xp+n);save();}
+function go(v){S.view=v;save();render();window.scrollTo(0,0);}
+function complete(id,pts){if(!S.done[id]){S.done[id]=true;addXP(pts);toast('🎉 Mission réussie ! +'+pts+' XP','good');}save();}
+const MAXXP=180;
+function rank(x){if(x>=160)return '🏆 Légende du pare-feu';if(x>=120)return '🥇 Expert·e cyber';if(x>=60)return '🥈 Agent·e cyber';return '🥉 Stagiaire en sécurité';}
+
+/* ---------- contenu ---------- */
+const MISSIONS={
+ m1:{n:1,p:1,t:'La boîte mail piégée',d:'10 mails à trier : fiable ou hameçonnage ?',pts:30},
+ m2:{n:2,p:1,t:'Le coffre des mots de passe',d:'Repère les mauvais mots de passe et crée une phrase de passe solide.',pts:30},
+ m3:{n:3,p:2,t:'Les sites jumeaux',d:'Vrai site ou faux site ? Lis les adresses comme un pro.',pts:25},
+ m4:{n:4,p:2,t:'Trop d’infos tue l’info',d:'Repère ce qu’un pirate pourrait utiliser sur un réseau social.',pts:25},
+ m5:{n:5,p:3,t:'Le message du pirate',d:'Décode le message secret et démasque la faille.',pts:30},
+ m6:{n:6,p:3,t:'L’affiche des règles d’or',d:'Crée dans Canva l’affiche de sensibilisation de l’entreprise.',pts:40}
+};
+const HINTS={
+ m1:['Clique sur chaque mail et lis l’adresse COMPLÈTE de l’expéditeur : ce qui suit le @ doit être exactement le vrai nom (chocolaterie-lumen.be, cacao-import.be…). Une seule lettre différente = piège.','Passe la souris sur chaque bouton bleu : la barre noire montre où il mène vraiment. Méfie-toi aussi des messages urgents, secrets, ou qui demandent de l’argent, un code ou d’ouvrir un fichier bizarre.'],
+ m2:['Partie A : un pirate essaie d’abord les mots de passe les plus courants, les suites de touches, puis tout ce qu’il peut trouver sur toi ou sur ton entreprise (prénom, date, nom de la société…).','Partie B : une phrase de passe, ce sont plusieurs mots au hasard reliés par des symboles, avec un chiffre. Exemple (à ne pas recopier !) : Girafe+Velo=Piscine7'],
+ m3:['Le vrai nom du site, c’est ce qui se trouve juste AVANT le premier « / » après https://. Lis-le de droite à gauche : d’abord .be (ou .com…), puis le nom juste devant.','Compare lettre par lettre avec la liste des vrais sites : un « l » à la place d’un « i », un « 0 » à la place d’un « o »… Et ce qui est devant le vrai nom (comme « suivi. » ou « www. ») ne pose pas de problème.'],
+ m4:['Pour chaque info, demande-toi : « Un inconnu pourrait-il s’en servir pour entrer quelque part, deviner un mot de passe, se faire passer pour moi ou me voler ? »','Il y a 5 infos dangereuses. Pense : badge, date, animal, adresse… et vacances.'],
+ m5:['« J.C. », c’est Jules César. Il cachait ses messages en décalant chaque lettre dans l’alphabet. Utilise la roue juste en dessous !','Le décalage est de 3. Règle la roue sur 3 : la lettre codée D devient A, E devient B, etc. Les espaces et l’apostrophe ne changent pas.'],
+ m6:['Reprends une règle de chaque mission : les mails, les mots de passe, les liens, les réseaux sociaux, le wifi.']
+};
+const CONTEXT=`<div class="know"><b>📁 Ce que tu sais</b><ul>
+<li>L’adresse officielle de l’entreprise : <span class="mono">@chocolaterie-lumen.be</span></li>
+<li>Tes collègues : Julie Marchal (accueil), Christine Lefèvre (directrice), Sophie (comptabilité), le service RH.</li>
+<li>Banque : <b>Banque Horizon</b> (<span class="mono">banque-horizon.be</span>). Fournisseur de cacao : <b>Cacao Import</b> (<span class="mono">cacao-import.be</span>). Commande <b>n°4521</b> passée lundi.</li>
+<li>Aucun colis n’est attendu cette semaine.</li>
+<li>Le service informatique de l’entreprise… c’est toi (et ton tuteur) !</li></ul></div>`;
+
+const EMAILS=[
+ {name:'Julie Marchal',addr:'julie.marchal@chocolaterie-lumen.be',subj:'Réunion de jeudi déplacée',body:'Salut !\n\nLa réunion d’équipe de jeudi est déplacée à 14h, dans la salle du 1er étage. Pense à prendre le planning des commandes de Noël.\n\nBonne journée,\nJulie'},
+ {name:'Service Informatique',addr:'support@chocolaterie-lumen-it.com',subj:'⚠️ Votre boîte mail est pleine à 99 %',body:'Cher utilisateur,\n\nVotre boîte de messagerie a atteint sa limite. Si vous ne validez pas votre compte dans les 24 heures, TOUS vos messages seront supprimés.\n\n[[Valider mon compte|https://lumen-mail-verif.com/login]]\n\nLe service technique'},
+ {name:'Banque Horizon',addr:'securite@banque-horiz0n.net',subj:'Votre compte a été suspendu',body:'Cher client,\n\nNous avons détecté une activité inhabituelle sur votre compte. Pour le débloquer, confirmez votre numéro de carte et votre code secret en cliquant ci-dessous.\n\n[[Débloquer mon compte|https://banque-horiz0n.net/debloquer]]\n\nSans réponse de votre part, votre compte sera fermé définitivement.'},
+ {name:'Cacao Import',addr:'commandes@cacao-import.be',subj:'Confirmation de votre commande n°4521',body:'Bonjour,\n\nNous vous confirmons la bonne réception de votre commande n°4521 (25 kg de cacao en poudre, 10 kg de beurre de cacao). Livraison prévue le vendredi 14.\n\nVous pouvez suivre votre commande dans votre espace client :\n[[Mon espace client|https://www.cacao-import.be/compte]]\n\nCordialement,\nMarc Dubois, service commandes'},
+ {name:'Christine Lefèvre',addr:'c.lefevre.direction@gmail.com',subj:'URGENT et confidentiel',body:'Bonjour,\n\nJe suis en réunion et je ne peux pas téléphoner. J’ai besoin que tu fasses un virement de 4 800 € aujourd’hui pour un nouveau fournisseur. C’est confidentiel : n’en parle à personne, même pas à la comptabilité.\n\nJe compte sur toi.\n\nEnvoyé depuis mon téléphone'},
+ {name:'BelColis',addr:'info@belcolis-livraison.info',subj:'Votre colis est en attente 📦',body:'Votre colis n’a pas pu être livré car les frais de port n’ont pas été payés.\n\nRéglez 1,99 € dans les 48 h pour le recevoir, sinon il sera renvoyé à l’expéditeur.\n\n[[Payer les frais|https://belcolis-livraison.info/paiement]]'},
+ {name:'Service RH',addr:'rh@chocolaterie-lumen.be',subj:'Rappel : formation sécurité vendredi',body:'Bonjour à toutes et à tous,\n\nPetit rappel : la formation « Sécurité au travail » a lieu vendredi à 9h au réfectoire. Le programme est disponible sur l’intranet :\n[[Voir le programme|https://intranet.chocolaterie-lumen.be/formations]]\n\nMerci de confirmer votre présence auprès de Julie.\nLe service RH'},
+ {name:'Super Cadeaux',addr:'promo@super-cadeaux-gratuits.xyz',subj:'🎁 FÉLICITATION vous avez gagné !!!',body:'Felicitation !!! Vous etes le 1 000 000e visiteur et vous avez gagné un smartphone dernier modèle.\n\nPour recevoir votre cadeau, remplissez le formulaire avec vos coordonnées et payez seulement les frais d’envoi. Offre valable 10 minutes !!!\n\n[[Réclamer mon cadeau|https://super-cadeaux-gratuits.xyz/gagnant]]'},
+ {name:'Comptabilité',addr:'comptabilite@chocolaterie-lumen.be',subj:'Fiches de paie d’octobre disponibles',body:'Bonjour,\n\nComme chaque mois, les fiches de paie d’octobre sont disponibles dans votre espace personnel sur l’intranet :\n[[Accéder à l’intranet|https://intranet.chocolaterie-lumen.be/paie]]\n\nPour toute question, passez au bureau de la comptabilité (rez-de-chaussée).\nSophie, service comptabilité'},
+ {name:'Julie Marchal',addr:'julie.marchal@chocolaterie-lumem.be',subj:'Re: document à vérifier',body:'Coucou,\n\nPeux-tu ouvrir la pièce jointe et me dire si c’est bon ? C’est assez pressé.\n\nMerci !',att:'facture_novembre.pdf.exe'}
+];
+const PWS=['Lumen2026!','123456','Chat-Bleu-Mange-7-Frites!','azertyuiop','Julie2004'];
+const PWOPT={A:'Trop court et beaucoup trop courant',B:'Simple suite de touches du clavier',C:'Contient des informations personnelles',D:'Contient le nom de l’entreprise et l’année',E:'Aucun défaut majeur : c’est un bon mot de passe'};
+const Q_M2C=[
+ {q:'Thomas utilise le même mot de passe pour sa boîte mail, son compte de jeu en ligne et sa banque. Le site de jeux se fait pirater. Quel est le risque ?',o:['Aucun : seul le site de jeux est concerné.','Le pirate va essayer ce mot de passe sur tous les autres comptes de Thomas.','Son mot de passe sera automatiquement changé partout.']},
+ {q:'La double authentification (2FA), c’est…',o:['Taper deux fois son mot de passe.','Avoir deux comptes différents sur le même site.','Confirmer sa connexion avec un 2e élément, par exemple un code reçu sur son téléphone.']},
+ {q:'Où ranger ses mots de passe ?',o:['Sur un post-it collé sous le clavier.','Dans un gestionnaire de mots de passe.','Dans un fichier « mes mots de passe.docx » sur le bureau.']}
+];
+const URLS=['https://www.banque-horizon.be/connexion','https://banque-horizon.be.securite-login.com/connexion','https://suivi.belcolis.be/colis/4521','http://belcolis.be-suivi.net/colis','https://www.cacao-lmport.be/catalogue','https://intranet.chocolaterie-lumen.be/paie','https://www.banque-horlzon.be','https://www.cacao-import.be/catalogue?promo=hiver','https://chocolaterie-lumen-support.com/aide','https://www.chocolaterie-lumen.be.connexion-securisee.net'];
+const POST=[
+ ['s1','Trop content de commencer mon nouveau job 🍫🎉'],' ',['s2','Voici mon badge d’accès 😎 n° 0457-LUM'],'. ',['s3','La team est trop sympa'],' ! Et ce n’est pas tout : ',['s4','c’est mon anniversaire, né le 12 mars 2007 🎂'],'. ',['s5','Petit bisou à Rocky, mon chien 🐶 (c’est aussi mon mot de passe 🤫)'],'. ',['s9','J’ai déjà mangé trop de pralines 😅'],' ',['s8','Il fait trop beau aujourd’hui ☀️'],'. Bientôt les vacances : ',['s7','on part à Majorque, la maison sera vide du 20 au 30'],' ✈️ Si vous passez ',['s6','au 14 rue des Tilleuls'],' en revenant, arrosez mes plantes 😂 ',['s10','#chocolat #nouveaujob']
+];
+const Q_M4B=[
+ {q:'Ton téléphone sonne : « Bonjour, ici le service technique de votre fournisseur internet. Pour réparer votre connexion, donnez-moi votre mot de passe. » Que fais-tu ?',o:['Je le donne, c’est le service technique.','Je raccroche et je rappelle moi-même le numéro officiel du fournisseur.','Je donne seulement la moitié du mot de passe, par prudence.']},
+ {q:'Tu reçois ce SMS : « BelColis : votre colis est bloqué. Payez 2,49 € ici : bel-colis-paiement.top ». Que fais-tu ?',o:['Je clique pour vérifier, ça ne coûte que 2,49 €.','Je supprime le SMS et, si j’ai un doute, je vais moi-même sur le site officiel en tapant l’adresse.','Je réponds « STOP » pour ne plus être dérangé·e.']},
+ {q:'Une clé USB marquée « Salaires 2026 » traîne sur le parking de l’entreprise. Que fais-tu ?',o:['Je la branche sur mon PC pour voir à qui elle appartient.','Je la remets au service informatique ou à mon responsable, sans la brancher.','Je la garde, on ne sait jamais.']}
+];
+const Q_M5B=[
+ {q:'Que proposes-tu à Mme Lefèvre pour régler ce problème ?',o:['Coller le post-it à un autre endroit, un peu plus caché.','Changer le code wifi, ne plus l’afficher, et créer un réseau « invités » séparé pour les visiteurs.','Supprimer le wifi de l’entreprise pour toujours.']}
+];
+const CIPHER=DATA.cipher;
+const LEX=[
+ ['Hameçonnage (phishing)','Faux message (mail, SMS…) qui imite une personne ou une entreprise de confiance pour te voler des codes, de l’argent ou des informations.'],
+ ['Nom de domaine','Le « vrai nom » d’un site ou d’une adresse mail : ce qui se trouve après le @, ou juste avant le premier / dans une adresse web. Exemple : chocolaterie-lumen.be'],
+ ['Pièce jointe .exe','Fichier qui est un programme. S’il est ouvert, il peut installer un virus. Un « .pdf.exe » est un programme déguisé en PDF.'],
+ ['Phrase de passe','Mot de passe long composé de plusieurs mots au hasard, facile à retenir mais très dur à deviner.'],
+ ['Double authentification (2FA)','En plus du mot de passe, on confirme sa connexion avec un 2e élément (code SMS, application, empreinte…).'],
+ ['Gestionnaire de mots de passe','Application sécurisée qui retient tous tes mots de passe. Tu n’en retiens plus qu’un seul : celui du gestionnaire.'],
+ ['Ingénierie sociale','Manipuler une personne (par téléphone, message, en face à face) pour qu’elle donne d’elle-même des informations ou un accès.'],
+ ['Arnaque au président','Un pirate se fait passer pour le patron et demande un virement urgent et « confidentiel ».']
+];
+
+/* ---------- rendu général ---------- */
+function topbar(){
+ if(!S.name)return '';
+ return `<div class="topbar"><a href="index.html" class="btn ghost sm" style="text-decoration:none">🏠 Accueil</a><div class="logo">🔐 Opération <span>Pare-feu</span></div><div class="grow"></div>
+ <span class="pill">👤 ${esc(S.name)}</span><span class="pill">${rank(S.xp)}</span><span class="pill xp">⭐ ${S.xp} XP</span>
+ <button class="btn ghost sm" onclick="lexique()">📖 Lexique</button>
+ ${S.view!=='hub'?`<button class="btn ghost sm" onclick="go('hub')">🗺️ Carte des missions</button>`:''}</div>`;
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function render(){
+ if(!S.name)S.view='home';
+ const v={home:vHome,hub:vHub,m1:vM1,m2:vM2,m3:vM3,m4:vM4,m5:vM5,m6:vM6,cert:vCert}[S.view]||vHub;
+ $('#app').innerHTML=topbar()+`<div class="wrap">${v()}<div class="foot">Opération Pare-feu · escape game de cybersécurité · Chocolaterie Lumen est une entreprise fictive.${S.name?` · <button onclick="resetAsk()">Changer de joueur</button>`:''}</div></div>`;
+ if(S.view==='m2')pwLive();
+ if(S.view==='m5')drawWheel();
+}
+function hintBox(id){
+ const used=S.hints[id]||0,list=HINTS[id]||[];
+ let h=list.slice(0,used).map((t,i)=>`<div class="hint">💡 <b>Coup de pouce ${i+1}</b> : ${t}</div>`).join('');
+ if(used<list.length&&!S.done[id])h+=`<button class="btn ghost sm" onclick="useHint('${id}')">💡 Coup de pouce ${used+1}/${list.length} (−1 XP)</button>`;
+ return h;
+}
+function useHint(id){S.hints[id]=(S.hints[id]||0)+1;addXP(-1);render();}
+function head(id){const m=MISSIONS[id];const t=['','t1','t2','t3'][m.p],l=['','Palier 1 · Essentiel','Palier 2 · Confirmé','Palier 3 · Défi'][m.p];
+ return `<div style="margin-top:14px"><span class="tag ${t}">${l}</span></div><h1 style="margin-top:8px">Mission ${m.n} · ${m.t}</h1>`;}
+function lexique(){ $('#modal').innerHTML=`<div class="modal" onclick="if(event.target===this)this.remove()"><div class="card"><h2>📖 Lexique de l’agent cyber</h2><dl>${LEX.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl><div style="margin-top:16px"><button class="btn" onclick="$('#modal').innerHTML=''">Fermer</button></div></div></div>`;}
+function resetAsk(){ $('#modal').innerHTML=`<div class="modal"><div class="card"><h2>Changer de joueur ?</h2><p>Toute la progression de <b>${esc(S.name)}</b> sur cet ordinateur sera effacée.</p><div class="row"><button class="btn" style="background:var(--red);color:#fff" onclick="S=fresh();save();$('#modal').innerHTML='';render()">Oui, effacer</button><button class="btn ghost" onclick="$('#modal').innerHTML=''">Annuler</button></div></div></div>`;}
+
+/* ---------- accueil ---------- */
+function vHome(){
+ return `<div style="text-align:left"><a href="index.html" class="btn ghost sm" style="text-decoration:none;display:inline-block">← Retour à l’accueil</a></div><div class="hero"><div style="font-size:3em">🔐</div><h1>Opération <span>Pare-feu</span></h1><p style="color:var(--mute)">Escape game de cybersécurité · environ 2 heures</p></div>
+ <div class="card story"><h2>Ta mission</h2>
+ <p>Tu commences aujourd’hui ton stage au service informatique de la <b>Chocolaterie Lumen</b>, une PME de 25 personnes.</p>
+ <p>Mme Lefèvre, la directrice, est inquiète : plusieurs employés ont reçu des messages bizarres, et l’ordinateur de la comptabilité a été bloqué la semaine passée. Quelqu’un essaie d’entrer dans l’entreprise…</p>
+ <p>Ton job : <b>repérer les pièges, sécuriser l’entreprise et démasquer le pirate.</b></p>
+ <div class="know"><b>Comment ça marche ?</b><ul>
+ <li>3 paliers : 🥉 <b>Essentiel</b> (pour tout le monde), 🥈 <b>Confirmé</b>, 🥇 <b>Défi</b>. Avance à ton rythme.</li>
+ <li>Chaque mission réussie rapporte des <b>XP</b>. Une erreur à la vérification coûte 1 XP.</li>
+ <li>Bloqué·e ? Utilise un <b>coup de pouce</b> (−1 XP). Il n’y a aucune honte : les meilleurs agents demandent de l’aide.</li>
+ <li>À la fin de chaque palier, appelle ton professeur : il te donnera le <b>code</b> pour passer au suivant.</li></ul></div>
+ <form onsubmit="event.preventDefault();start()" class="row" style="margin-top:16px"><input type="text" id="nm" placeholder="Ton prénom et la première lettre de ton nom" maxlength="40" style="flex:1;min-width:240px" required><button class="btn">Commencer la mission →</button></form></div>`;
+}
+function start(){const v=$('#nm').value.trim();if(!v)return;S.name=v;go('hub');}
+
+/* ---------- carte ---------- */
+function vHub(){
+ const pal=[1,2,3].map(p=>{
+  const open=p===1||S.gates[p];
+  const ms=Object.entries(MISSIONS).filter(([,m])=>m.p===p);
+  const t=['','t1','t2','t3'][p],nm=['','🥉 Palier 1 · Essentiel','🥈 Palier 2 · Confirmé','🥇 Palier 3 · Défi'][p];
+  const sub=['','Pour tout le monde · ~50 min','~40 min','Pour les plus rapides · le temps qu’il te reste'][p];
+  let html=`<div class="palier ${open?'':'locked'}"><h2>${nm} <span class="tag ${t}">${sub}</span></h2><div class="missions">`+
+   ms.map(([id,m])=>`<button class="mcard" ${open?`onclick="go('${id}')"`:'disabled'}><span class="st">${S.done[id]?'✅ Réussie':open?'▶ À faire':'🔒'}</span><b>Mission ${m.n} · ${m.t}</b><small>${m.d}</small><br><small class="xp">+${m.pts} XP</small></button>`).join('')+`</div>`;
+  if(p<3){
+   const next=p+1;
+   const allDone=ms.every(([id])=>S.done[id]);
+   if(S.gates[next])html+=`<div class="gate">✅ Palier ${p} validé par le professeur.</div>`;
+   else if(allDone)html+=`<div class="gate">🙋 <b>Bravo, palier ${p} terminé !</b> Appelle ton professeur pour qu’il valide et entre le code.<input type="text" id="g${next}" placeholder="Code du professeur" autocomplete="off"><button class="btn gold" onclick="gate(${next})">Débloquer le palier ${next}</button></div>`;
+  }
+  return html+'</div>';
+ }).join('');
+ const pct=Math.round(100*S.xp/MAXXP);
+ return `<div class="card"><div class="row"><div class="grow"><h2 style="margin:0">Carte des missions</h2><small style="color:var(--mute)">Progression : ${Object.keys(S.done).length}/6 missions · ${S.xp}/${MAXXP} XP</small></div><button class="btn ghost" onclick="go('cert')">🎓 Mon certificat</button></div><div class="progress" style="margin-top:12px"><div style="width:${pct}%"></div></div></div><div class="paliers">${pal}</div>`;
+}
+function gate(n){const v=($('#g'+n).value||'').trim().toUpperCase();if(H('prof|'+n+'|'+v)===DATA.prof[n]){S.gates[n]=true;save();toast('🔓 Palier '+n+' débloqué !','good');render();}else toast('Code incorrect.','bad');}
+
+/* ---------- mission 1 ---------- */
+function body(t){return esc(t).replace(/\[\[(.+?)\|(.+?)\]\]/g,(m,a,u)=>`<span class="fakelink" role="link" tabindex="0" data-url="${u}" onmouseenter="showUrl(this)" onfocus="showUrl(this)" onclick="showUrl(this)">${a}</span>`).replace(/\n/g,'<br>');}
+function showUrl(el){const s=$('#status');if(s)s.innerHTML='🔗 Ce bouton mène en réalité vers : <b>'+el.dataset.url+'</b>';}
+function mk(c){return c==='F'?'✅':c==='H'?'🎣':'✉️';}
+function vM1(){
+ const sel=S.m1sel||0,e=EMAILS[sel],done=S.done.m1,c=S.m1[sel];
+ const n=Object.keys(S.m1).length;
+ let h=head('m1')+`<p>Les employés t’ont transféré leurs mails suspects. Pour chacun, décide : <b>✅ Fiable</b> ou <b>🎣 Hameçonnage</b> (un piège).</p>${CONTEXT}${hintBox('m1')}
+ <div class="mailapp" style="margin-top:14px"><div class="inbox"><div class="ih">📥 Boîte de réception (${n}/10 triés)</div>${EMAILS.map((m,i)=>`<button class="mail ${i===sel?'active':''}" onclick="S.m1sel=${i};save();render()"><span class="mk">${mk(S.m1[i])}</span><span class="from">${esc(m.name)}</span><span class="subj">${esc(m.subj)}</span></button>`).join('')}</div>
+ <div class="reader"><div class="hdr"><div><b>De :</b> ${esc(e.name)} <span class="addr">&lt;${esc(e.addr)}&gt;</span></div><div><b>À :</b> moi</div><div><b>Objet :</b> ${esc(e.subj)}</div></div>
+ <div class="body">${body(e.body)}${e.att?`<br><span class="att">📎 ${esc(e.att)}</span>`:''}</div>
+ <div class="status" id="status">Passe la souris sur un bouton bleu pour voir où il mène vraiment (sans cliquer !).</div>
+ <div class="classify"><button class="cbtn f ${c==='F'?'on':''}" ${done?'disabled':''} onclick="m1mark('F')">✅ Fiable</button><button class="cbtn h ${c==='H'?'on':''}" ${done?'disabled':''} onclick="m1mark('H')">🎣 Hameçonnage</button></div></div></div>`;
+ if(!done)h+=`<div class="verify"><button class="btn" ${n<10?'disabled':''} onclick="m1check()">🔍 Vérifier mon tri</button><span style="color:var(--mute)">${n<10?'Trie les 10 mails pour pouvoir vérifier.':'Prêt·e ? Une erreur coûte 1 XP.'}</span></div>`;
+ else h+=`<div class="debrief"><h3>🎉 Mission réussie ! Le débrief :</h3>${dec(DATA.m1d,EMAILS.map((x,i)=>S.m1[i]).join(''))}</div><div class="verify"><button class="btn" onclick="go('hub')">Retour à la carte →</button></div>`;
+ return h;
+}
+function m1mark(c){S.m1[S.m1sel||0]=c;for(let k=1;k<=10;k++){const j=((S.m1sel||0)+k)%10;if(!S.m1[j]){S.m1sel=j;break;}}save();render();}
+function m1check(){let err=0;EMAILS.forEach((x,i)=>{if(H('m1|'+i+'|'+S.m1[i])!==DATA.m1[i])err++;});
+ if(err){addXP(-1);render();toast('Il reste '+err+' erreur'+(err>1?'s':'')+'… cherche encore ! (−1 XP)','bad');}else{complete('m1',MISSIONS.m1.pts);render();}}
+
+/* ---------- mission 2 ---------- */
+function vM2(){
+ const A=S.parts.m2a,B=S.parts.m2b;
+ let h=head('m2')+`<p>Tu fais le tour des bureaux. Voici les mots de passe que tu as trouvés… notés sur des post-it 😱.</p>${hintBox('m2')}
+ <div class="card"><h3>Partie A · Quel est le défaut de chaque mot de passe ?</h3>`+
+ PWS.map((p,i)=>`<div class="pw"><span class="mono">${esc(p)}</span><select ${A?'disabled':''} onchange="S.m2a[${i}]=this.value;save()"><option value="">— Choisis le défaut —</option>${Object.entries(PWOPT).map(([k,v])=>`<option value="${k}" ${S.m2a[i]===k?'selected':''}>${v}</option>`).join('')}</select></div>`).join('')+
+ (A?`<div class="debrief">${dec(DATA.m2ad,PWS.map((x,i)=>S.m2a[i]).join(''))}</div>`:`<div class="verify"><button class="btn" onclick="m2acheck()">🔍 Vérifier</button><small style="color:var(--mute)">Chaque défaut n’est utilisé qu’une seule fois.</small></div>`)+`</div>
+ <div class="card"><h3>Partie B · Crée une phrase de passe incassable</h3>
+ <p>⚠️ <b>N’écris PAS un de tes vrais mots de passe !</b> Invente-en un nouveau, juste pour l’exercice.</p>`+
+ (B?`<div class="debrief">✅ Phrase de passe validée ! Retiens la méthode : plusieurs mots au hasard + symboles + un chiffre. Long = solide.</div>`:
+ `<input type="text" id="pwin" autocomplete="off" spellcheck="false" placeholder="Tape ta phrase de passe inventée…" style="width:100%" oninput="pwLive()">
+ <ul class="checks" id="pwchecks"></ul><div class="crack" id="crack"></div><div class="verify"><button class="btn" id="pwbtn" disabled onclick="S.parts.m2b=true;save();m2maybe();render()">✅ Valider ma phrase de passe</button></div>`)+`</div>
+ <div class="card"><h3>Partie C · Le quiz du coffre-fort</h3>${qcm('m2c',Q_M2C)}</div>`;
+ if(S.done.m2)h+=`<div class="verify"><button class="btn" onclick="go('hub')">Retour à la carte →</button></div>`;
+ return h;
+}
+function m2acheck(){let err=0,miss=0;PWS.forEach((x,i)=>{if(!S.m2a[i])miss++;else if(H('m2a|'+i+'|'+S.m2a[i])!==DATA.m2a[i])err++;});
+ if(miss){toast('Choisis un défaut pour chaque mot de passe.');return;}
+ if(err){addXP(-1);toast(err+' erreur'+(err>1?'s':'')+'… réessaie ! (−1 XP)','bad');render();}else{S.parts.m2a=true;save();toast('Partie A réussie !','good');m2maybe();render();}}
+const BAN=['lumen','chocolat','123','azerty','qwerty','password','motdepasse','mdp','admin'];
+function pwLive(){
+ const el=$('#pwin');if(!el)return;const v=el.value,low=v.toLowerCase();
+ const c=[[v.length>=14,'Au moins 14 caractères ('+v.length+')'],[/[A-Z]/.test(v),'Au moins une MAJUSCULE'],[/[a-z]/.test(v),'Au moins une minuscule'],[/[0-9]/.test(v),'Au moins un chiffre'],[/[^A-Za-z0-9]/.test(v),'Au moins un symbole (! ? + - = # …)'],[v.length>0&&!BAN.some(b=>low.includes(b)),'Aucun mot trop facile (lumen, chocolat, 123, azerty, mdp…)'],[v.length>0&&!/(.)\1\1/.test(v),'Pas 3 fois le même caractère d’affilée']];
+ $('#pwchecks').innerHTML=c.map(([ok,t])=>`<li class="${ok?'ok':'ko'}">${ok?'✅':'⬜'} ${t}</li>`).join('');
+ const pool=(/[a-z]/.test(v)?26:0)+(/[A-Z]/.test(v)?26:0)+(/[0-9]/.test(v)?10:0)+(/[^A-Za-z0-9]/.test(v)?33:0);
+ let txt='';
+ if(v.length){const lg=v.length*Math.log10(pool||1)-Math.log10(2e10);const yrs=lg-Math.log10(31557600);
+  if(lg<0)txt='instantanément 😱';else if(lg<Math.log10(60))txt=Math.max(1,Math.round(10**lg))+' secondes 😬';else if(lg<Math.log10(3600))txt=Math.round(10**lg/60)+' minutes 😬';else if(lg<Math.log10(86400))txt=Math.round(10**lg/3600)+' heures 😐';else if(yrs<0)txt=Math.round(10**lg/86400)+' jours 🙂';else if(yrs<6)txt=Math.round(10**yrs).toLocaleString('fr-BE')+' ans 💪';else if(yrs<10.1)txt='des milliards d’années 🛡️';else txt='plus longtemps que l’âge de l’Univers 🚀';
+  if(BAN.some(b=>low.includes(b)))txt='beaucoup moins que ça : les pirates testent d’abord les mots connus ! 😱';}
+ $('#crack').innerHTML=v.length?'⏱️ Temps estimé pour qu’un ordinateur pirate le trouve : <b>'+txt+'</b>':'';
+ $('#pwbtn').disabled=!c.every(x=>x[0]);
+}
+function m2maybe(){if(S.parts.m2a&&S.parts.m2b&&Q_M2C.every((q,i)=>S.parts['m2c'+i]))complete('m2',MISSIONS.m2.pts);}
+
+/* ---------- QCM ---------- */
+function qcm(p,qs){return qs.map((q,i)=>{const d=S.parts[p+i];return `<div class="q"><p class="qt">${i+1}. ${q.q}</p>${q.o.map((o,j)=>{const L='ABC'[j];return `<label class="opt ${d===L?'good':''}"><input type="radio" name="${p}${i}" value="${L}" ${d?'disabled':''} ${d===L?'checked':''}> ${o}</label>`;}).join('')}${d?`<div class="exp">✅ ${dec(DATA[p+'x'][i],p+i+d)}</div>`:`<button class="btn sm" style="margin-top:6px" onclick="qcheck('${p}',${i})">Vérifier</button>`}</div>`;}).join('');}
+function qcheck(p,i){const r=document.querySelector(`input[name="${p}${i}"]:checked`);if(!r){toast('Choisis une réponse.');return;}
+ if(H(p+'|'+i+'|'+r.value)===DATA[p][i]){S.parts[p+i]=r.value;save();toast('Bonne réponse !','good');({m2c:m2maybe,m4b:m4maybe,m5b:m5maybe})[p]();render();}
+ else{addXP(-1);render();toast('Pas tout à fait… relis bien la question (−1 XP)','bad');}}
+
+/* ---------- mission 3 ---------- */
+function vM3(){
+ const done=S.done.m3,n=Object.keys(S.m3).length;
+ let h=head('m3')+`<p>Les pirates créent des <b>sites jumeaux</b> : ils ressemblent au vrai, mais l’adresse est différente. Ton tuteur te donne 10 adresses trouvées dans les historiques des PC. Pour chacune : <b>vrai site</b> ou <b>faux site</b> ?</p>
+ <div class="know"><b>📁 Les vrais sites de l’entreprise et de ses partenaires</b><ul><li><span class="mono">chocolaterie-lumen.be</span> (et son intranet)</li><li><span class="mono">banque-horizon.be</span></li><li><span class="mono">belcolis.be</span></li><li><span class="mono">cacao-import.be</span></li></ul></div>${hintBox('m3')}<div class="card">`+
+ URLS.map((u,i)=>`<div class="urlrow"><div class="bar">${u.startsWith('https')?'🔒':'⚠️'} ${esc(u)}</div><div class="vf"><button class="v ${S.m3[i]==='V'?'on':''}" ${done?'disabled':''} onclick="S.m3[${i}]='V';save();render()">✔ Vrai</button><button class="x ${S.m3[i]==='F'?'on':''}" ${done?'disabled':''} onclick="S.m3[${i}]='F';save();render()">✖ Faux</button></div></div>`).join('')+`</div>`;
+ if(!done)h+=`<div class="verify"><button class="btn" ${n<10?'disabled':''} onclick="m3check()">🔍 Vérifier</button><span style="color:var(--mute)">${n}/10 adresses classées. Attention : le cadenas 🔒 ne prouve PAS qu’un site est le vrai !</span></div>`;
+ else h+=`<div class="debrief"><h3>🎉 Mission réussie ! Le débrief :</h3>${dec(DATA.m3d,URLS.map((x,i)=>S.m3[i]).join(''))}</div><div class="verify"><button class="btn" onclick="go('hub')">Retour à la carte →</button></div>`;
+ return h;
+}
+function m3check(){let err=0;URLS.forEach((x,i)=>{if(H('m3|'+i+'|'+S.m3[i])!==DATA.m3[i])err++;});
+ if(err){addXP(-1);render();toast('Il reste '+err+' erreur'+(err>1?'s':'')+'… (−1 XP)','bad');}else{complete('m3',MISSIONS.m3.pts);render();}}
+
+/* ---------- mission 4 ---------- */
+function vM4(){
+ const f=S.m4f,w=S.m4w,A=S.parts.m4a;
+ let h=head('m4')+`<p>Tom vient d’être engagé à la Chocolaterie Lumen. Il a publié ce message <b>public</b> sur son réseau social. Un pirate qui prépare une attaque adore ce genre de post…</p>
+ <p><b>Clique sur les 5 informations qu’un pirate pourrait utiliser.</b> Attention : cliquer sur une info sans danger coûte 1 XP.</p>${hintBox('m4')}
+ <div class="post"><div class="ph"><div class="avatar">T</div><div><b>tom.vdb</b><br><small style="color:#777">Public 🌍 · il y a 2 h</small></div></div><div class="pic">🍫🎉</div><div class="ptxt">`+
+ POST.map(x=>typeof x==='string'?esc(x):`<span class="seg ${f.includes(x[0])?'found':w.includes(x[0])?'safe':''}" onclick="m4click('${x[0]}')">${esc(x[1])}</span>`).join('')+
+ `</div><div style="padding:8px 16px 14px;color:#777">❤️ 48 &nbsp; 💬 12</div></div>
+ <p class="counter" style="text-align:center">⚠️ Infos dangereuses trouvées : <b>${f.length}/5</b></p>`;
+ if(A)h+=`<div class="debrief">${dec(DATA.m4d,f.slice().sort().join(','))}</div>`;
+ h+=`<div class="card"><h3>Partie B · Les pièges hors réseaux sociaux</h3>${qcm('m4b',Q_M4B)}</div>`;
+ if(S.done.m4)h+=`<div class="verify"><button class="btn" onclick="go('hub')">Retour à la carte →</button></div>`;
+ return h;
+}
+function m4click(id){if(S.parts.m4a||S.m4f.includes(id)||S.m4w.includes(id))return;
+ if(DATA.m4r.includes(H('m4|'+id))){S.m4f.push(id);if(S.m4f.length===5){S.parts.m4a=true;}save();toast(S.m4f.length===5?'🎯 Les 5 infos dangereuses trouvées !':'⚠️ Bien vu ! Un pirate pourrait s’en servir.','good');m4maybe();}
+ else{S.m4w.push(id);addXP(-1);toast('Ça, ce n’est pas vraiment dangereux (−1 XP)','bad');}
+ render();}
+function m4maybe(){if(S.parts.m4a&&Q_M4B.every((q,i)=>S.parts['m4b'+i]))complete('m4',MISSIONS.m4.pts);}
+
+/* ---------- mission 5 ---------- */
+function vM5(){
+ const A=S.parts.m5a;
+ let h=head('m5')+`<p>Grâce à ton travail, ton tuteur a fouillé le serveur. Il y a trouvé un message laissé par le pirate à son complice, signé :<br><i>« J.C. — toujours 3 longueurs d’avance sur vous 😈 »</i></p>
+ <div class="cipher">${esc(CIPHER)}</div>${hintBox('m5')}
+ <div class="card"><h3>🛞 La roue de décodage</h3><p style="color:var(--mute);margin-top:0">Choisis un décalage. Ligne du haut : la lettre codée. Ligne du bas : la vraie lettre.</p>
+ <div class="shift"><button class="btn ghost sm" onclick="sh(-1)">◀</button><span>Décalage :</span><b id="shv">0</b><button class="btn ghost sm" onclick="sh(1)">▶</button></div><div class="wheel" id="wheel"></div></div>
+ <div class="card"><h3>✍️ Le message décodé</h3>`+
+ (A?`<div class="debrief">${dec(DATA.m5ax,S.parts.m5a)}</div>`:`<textarea id="m5in" rows="2" style="width:100%" placeholder="Écris ici le message en clair…"></textarea><div class="verify"><button class="btn" onclick="m5check()">🔍 Vérifier</button><small style="color:var(--mute)">Les espaces, accents et la ponctuation ne comptent pas.</small></div>`)+`</div>`;
+ if(A)h+=`<div class="card"><h3>La solution à proposer</h3>${qcm('m5b',Q_M5B)}</div>`;
+ if(S.done.m5)h+=`<div class="verify"><button class="btn" onclick="go('hub')">Retour à la carte →</button></div>`;
+ return h;
+}
+let SHIFT=0;
+function sh(d){SHIFT=(SHIFT+d+26)%26;drawWheel();}
+function drawWheel(){const w=$('#wheel');if(!w)return;$('#shv').textContent=SHIFT;const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+ w.innerHTML=`<table><tr><th>Codé</th>${[...A].map(c=>`<td>${c}</td>`).join('')}</tr><tr><th>En clair</th>${[...A].map((c,i)=>`<td>${A[(i-SHIFT+26)%26]}</td>`).join('')}</tr></table>`;}
+function m5check(){const v=($('#m5in').value||'').normalize('NFD').replace(/[^A-Za-z]/g,'').toUpperCase();
+ if(H('m5a|'+v)===DATA.m5a){S.parts.m5a=v;save();toast('🔓 Message décodé !','good');render();}else{addXP(-1);toast('Ce n’est pas encore le bon message… (−1 XP)','bad');}}
+function m5maybe(){if(S.parts.m5a&&Q_M5B.every((q,i)=>S.parts['m5b'+i]))complete('m5',MISSIONS.m5.pts);}
+
+/* ---------- mission 6 ---------- */
+const CRIT=['Format A4 ou A3 (affiche verticale)','Un titre accrocheur','5 règles d’or claires, une par mission (mails, mots de passe, sites, réseaux sociaux, wifi)','Un pictogramme ou une illustration pour chaque règle','Les couleurs de l’entreprise : brun chocolat et doré','Un texte court et lisible de loin','Zéro faute d’orthographe (fais relire par un·e voisin·e !)','Ton prénom en petit, en bas de l’affiche'];
+function vM6(){
+ let h=head('m6')+`<p>Mme Lefèvre est ravie ! Pour que plus personne ne tombe dans le piège, elle te demande une <b>affiche de sensibilisation</b> à accrocher dans la salle de pause : <b>« Les 5 règles d’or de la cybersécurité »</b>.</p>
+ <div class="know"><b>🛠️ Outil</b> : Canva (modèle « Affiche »). Tu peux t’inspirer de tes débriefs de mission.</div>${hintBox('m6')}
+ <div class="card crit"><h3>✅ Ta checklist avant de montrer ton affiche</h3>${CRIT.map((c,i)=>`<label><input type="checkbox" ${S.m6c[i]?'checked':''} onchange="S.m6c[${i}]=this.checked;save()"> ${c}</label>`).join('')}
+ <p style="margin-bottom:0"><b>🌟 Bonus d’expert</b> : ajoute un QR code (générateur intégré à Canva) qui renvoie vers un site officiel de conseils en cybersécurité.</p></div>`;
+ if(S.done.m6)h+=`<div class="debrief">🎉 Affiche validée par ton professeur ! Tu as terminé l’Opération Pare-feu.</div><div class="verify"><button class="btn gold" onclick="go('cert')">🎓 Voir mon certificat</button></div>`;
+ else h+=`<div class="gate">🙋 Affiche terminée ? Montre-la à ton professeur. Il entrera le code de validation.<input type="text" id="g6" placeholder="Code du professeur" autocomplete="off"><button class="btn gold" onclick="m6check()">Valider l’affiche</button></div>`;
+ return h;
+}
+function m6check(){const v=($('#g6').value||'').trim().toUpperCase();if(H('prof|6|'+v)===DATA.prof[6]){complete('m6',MISSIONS.m6.pts);render();}else toast('Code incorrect.','bad');}
+
+/* ---------- certificat ---------- */
+function vCert(){
+ const d=new Date().toLocaleDateString('fr-BE',{day:'numeric',month:'long',year:'numeric'});
+ const nb=Object.keys(S.done).length;
+ return `<div class="cert" style="margin-top:20px"><div style="font-size:2.6em">🔐</div><div style="color:var(--mute);letter-spacing:.1em;text-transform:uppercase">Chocolaterie Lumen · Opération Pare-feu</div>
+ <h2 style="margin-top:14px">Certificat d’agent cyber</h2><p>décerné à</p><div class="name">${esc(S.name)}</div><div class="rank">${rank(S.xp)}</div>
+ <p class="xp" style="font-size:1.4em">⭐ ${S.xp} / ${MAXXP} XP</p><p>${nb}/6 missions réussies · ${Object.values(S.hints).reduce((a,b)=>a+b,0)} coup(s) de pouce utilisé(s)</p>
+ <div style="max-width:420px;margin:10px auto" class="progress"><div style="width:${Math.round(100*S.xp/MAXXP)}%"></div></div><p style="color:var(--mute)">${d}</p></div>
+ <div class="card"><h3>🪞 Mon auto-évaluation</h3><p style="margin-top:0;color:var(--mute)">Réponds pour toi, honnêtement.</p>
+ ${['Je sais reconnaître un mail d’hameçonnage.','Je sais créer un mot de passe solide (et je vais changer les miens !).','Je sais lire une adresse de site pour repérer un faux.','Je fais attention à ce que je publie sur les réseaux sociaux.'].map((t,i)=>`<div class="q"><p class="qt" style="margin-bottom:4px">${t}</p>${['😕 Pas encore','🙂 Plutôt oui','😎 Sans problème'].map((o,j)=>`<label class="opt" style="display:inline-block"><input type="radio" name="ae${i}" ${S.parts['ae'+i]===j?'checked':''} onchange="S.parts['ae${i}']=${j};save()"> ${o}</label>`).join('')}</div>`).join('')}</div>
+ <div class="verify"><button class="btn" onclick="go('hub')">Retour à la carte</button><span style="color:var(--mute)">Montre cet écran à ton professeur.</span></div>`;
+}
+
+render();
+</script>
+</body>
+</html>

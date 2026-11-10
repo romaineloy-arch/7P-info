@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informatique · 7e professionnelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1420;--panel:#151f30;--panel2:#1c2940;--line:#2a3a56;--txt:#e8eef7;--mute:#9db0cc;--cyan:#3ee0c4;--gold:#f5c451;--bronze:#d9925a;--silver:#c9d3e0}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-size:17px;line-height:1.5}
+body{background-image:radial-gradient(circle at 15% -10%,#1b3350 0,transparent 45%),radial-gradient(circle at 110% 10%,#1d2b47 0,transparent 40%);min-height:100vh}
+h1,h2,h3{font-family:"Space Grotesk",system-ui,sans-serif;line-height:1.2;margin:0 0 .4em}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 20px 60px}
+header{text-align:center;padding:20px 0 30px}
+header .k{display:inline-block;font-size:.8em;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);border:1px solid var(--line);border-radius:99px;padding:4px 14px;margin-bottom:14px}
+header h1{font-size:2.6em}
+header h1 span{color:var(--cyan)}
+header p{color:var(--mute);max-width:640px;margin:0 auto}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:10px 0 34px}
+.how div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.95em}
+.how b{display:block;font-family:"Space Grotesk",system-ui,sans-serif;margin-bottom:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.game{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;color:var(--txt);text-decoration:none;transition:transform .15s,border-color .15s}
+a.game:hover{transform:translateY(-3px);border-color:var(--cyan)}
+.cover{height:130px;display:grid;place-items:center;font-size:3.4em}
+.c1{background:linear-gradient(135deg,#0f3b4a,#1e6b6b 60%,#3ee0c4)}
+.soon .cover{background:repeating-linear-gradient(45deg,#172234,#172234 12px,#1a273b 12px,#1a273b 24px);color:#3a4a63}
+.game .in{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.game p{margin:0;color:var(--mute);font-size:.95em}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.75em;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--panel2);color:var(--mute)}
+.tag.new{background:rgba(62,224,196,.15);color:var(--cyan)}
+.go{margin-top:auto;font-weight:700;color:var(--cyan)}
+.soon{opacity:.7}
+.soon .go{color:var(--mute)}
+footer{margin-top:40px;text-align:center;color:var(--mute);font-size:.85em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="k">7e professionnelle · Informatique</div>
+  <h1>Le QG des <span>missions</span></h1>
+  <p>Choisis ta mission, avance à ton rythme et gagne des XP. Chaque mission dure environ 2 heures.</p>
+</header>
+
+<div class="how">
+  <div><b>🥉 🥈 🥇 3 paliers</b>Essentiel pour tout le monde, Confirmé, puis Défi pour les plus rapides.</div>
+  <div><b>💡 Coups de pouce</b>Bloqué·e ? Utilise un coup de pouce. Il coûte 1 XP, mais il te fait avancer.</div>
+  <div><b>🙋 Codes du professeur</b>À la fin de chaque palier, appelle ton professeur pour débloquer la suite.</div>
+</div>
+
+<div class="grid">
+  <a class="game" href="operation-pare-feu.html">
+    <div class="cover c1">🔐</div>
+    <div class="in">
+      <div class="tags"><span class="tag new">Nouveau</span><span class="tag">Cybersécurité</span><span class="tag">Canva</span></div>
+      <h2>Opération Pare-feu</h2>
+      <p>Stagiaire à la Chocolaterie Lumen, tu dois repérer les mails piégés, les faux sites et démasquer le pirate.</p>
+      <span class="go">Commencer la mission →</span>
+    </div>
+  </a>
+  <div class="game soon">
+    <div class="cover">🔒</div>
+    <div class="in">
+      <div class="tags"><span class="tag">Bientôt</span></div>
+      <h2>Prochaine mission</h2>
+      <p>Une nouvelle mission arrive bientôt. Reste connecté·e !</p>
+      <span class="go">Verrouillée</span>
+    </div>
+  </div>
+</div>
+
+<footer>Les entreprises et personnes présentes dans les missions sont fictives.</footer>
+</div>
+</body>
+</html>
